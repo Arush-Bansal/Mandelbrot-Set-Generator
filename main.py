@@ -1,34 +1,40 @@
 import cProfile
-import re
 import pstats
 
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
+import ctypes
+from numba import njit
+
+# lib = ctypes.CDLL(r'\Users\Arush Bansal\OneDrive - IIT Delhi\Desktop\Simulating Mandelbroad Set\isConvergent.exe')
+# lib.isConvergent.restype = ctypes.c_bool
+# lib.isConvergent.argtypes = [ctypes.c_double, ctypes.c_double]
+
+@njit
+def checkConvergence(number : "complex", z : "complex" = 0) -> bool :
+    iterNo = 0
+    while (abs(z) < 1000) and (iterNo < 100):
+        z = z*z + number
+        iterNo += 1
+    if abs(z) >=1000: return False
+    else: return True
+    # return lib.isConvergent(number.real, number.imag)
+
+def complexMatrix(x_start : float, x_end : float, y_start : float, y_end : float, stepSize: 'float'):
+    x_space = np.linspace(x_start, x_end, int((x_end - x_start)/stepSize) + 1)
+    y_space = np.linspace(y_start, y_end, int((y_end - y_start)/stepSize) + 1)
+    # matrix_dimension = int((x_end - x_start)/stepSize) + 1, int((y_end - y_start)/stepSize) + 1
+    # matrix = np.zeros(matrix_dimension, np.complex512)
+    # for i in range(len(matrix)):
+    #     for j in range(len)
+    return [[j + i*1j for j in x_space] for i in y_space]
+
 
 
 def main():
 
-    # arr = np.linspace(-5, 5, 1000)
-    # arr2 = np.linspace(-5, 5, 1000)
-    # X, Y = np.meshgrid(arr, arr2)
-    # print(Y)
-
-    def checkConvergence(number : "complex", z : "complex" = 0) -> bool :
-        iterNo = 0
-        while (abs(z) < 1000) and (iterNo < 100):
-            z = z*z + number
-            iterNo += 1
-        if abs(z) >=1000: return False
-        else: return True
-
-    def complexMatrix(x_start : float, x_end : float, y_start : float, y_end : float, stepSize: 'float'):
-        x_space = np.linspace(x_start, x_end, int((x_end - x_start)/stepSize) + 1)
-        y_space = np.linspace(y_start, y_end, int((y_end - y_start)/stepSize) + 1)
-        return [[j + i*1j for j in x_space] for i in y_space]
-
-
-    grid = complexMatrix(-2, 0.1, -2, 2, 0.001)
+    grid = complexMatrix(-2, 0.1, -2, 2, 0.01)
     # print(pd.DataFrame(grid))
 
     isConvergent= []
@@ -37,10 +43,6 @@ def main():
         for j, complex in enumerate(grid[i]):
             subConvergent.append( checkConvergence(complex))
         isConvergent.append(subConvergent)
-
-    # print(isConvergent)
-
-    # print(isConvergent)
     plt.imshow(isConvergent, cmap='hot')
     plt.show()
 
@@ -52,7 +54,7 @@ if __name__ == "__main__":
     stats = pstats.Stats(pr)
     stats.sort_stats(pstats.SortKey.TIME)
     stats.reverse_order()
-    stats.print_stats()
+    # stats.print_stats()
     stats.dump_stats(filename="hey.prof")
     # self reminder to use command "python -m snakeviz hey.prof" in command line to run the file
 
