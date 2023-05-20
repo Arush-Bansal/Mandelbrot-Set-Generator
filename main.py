@@ -21,20 +21,25 @@ def checkConvergence(number : "complex", z : "complex" = 0) -> bool :
     else: return True
     # return lib.isConvergent(number.real, number.imag)
 
+def linSpace(a, b, c):
+    return np.linspace(a, b, c)
+
 def complexMatrix(x_start : float, x_end : float, y_start : float, y_end : float, stepSize: 'float'):
-    x_space = np.linspace(x_start, x_end, int((x_end - x_start)/stepSize) + 1)
-    y_space = np.linspace(y_start, y_end, int((y_end - y_start)/stepSize) + 1)
+    x_space = linSpace(x_start, x_end, int((x_end - x_start)/stepSize) + 1)
+    y_space = linSpace(y_start, y_end, int((y_end - y_start)/stepSize) + 1)
     # matrix_dimension = int((x_end - x_start)/stepSize) + 1, int((y_end - y_start)/stepSize) + 1
     # matrix = np.zeros(matrix_dimension, np.complex512)
     # for i in range(len(matrix)):
     #     for j in range(len)
-    return [[j + i*1j for j in x_space] for i in y_space]
+
+    # return [[j + i*1j for j in x_space] for i in y_space]
+    return 1j * y_space[:, np.newaxis] +  x_space[np.newaxis, :]
 
 
 
 def main():
 
-    grid = complexMatrix(-2, 0.1, -2, 2, 0.01)
+    grid = complexMatrix(-2, 0.1, -2, 2, 0.001)
     # print(pd.DataFrame(grid))
 
     isConvergent= []
