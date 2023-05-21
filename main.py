@@ -36,18 +36,41 @@ def complexMatrix(x_start : float, x_end : float, y_start : float, y_end : float
     return 1j * y_space[:, np.newaxis] +  x_space[np.newaxis, :]
 
 
+def getConvergentMatrix(grid):
+    return np.zeros((len(grid), len(grid[0])),dtype=bool)
+
+@njit
+def iterateOverConvergentMatrix(grid, isConvergent):
+    for i in range(len(grid)):
+        for j in range(len(grid[0])):
+            isConvergent[i][j] = checkConvergence(grid[i][j])
+
+def complexMatrixWrapper(grid):
+    # isConvergent = np.vectorize(checkConvergence)(grid)
+    # vectorCheckConvergence = np.vectorize(checkConvergence)
+
+    # return vectorCheckConvergence(grid)
+
+    isConvergent = getConvergentMatrix(grid)
+    iterateOverConvergentMatrix(grid, isConvergent)
+
+    return isConvergent
+
+
+
 
 def main():
 
     grid = complexMatrix(-2, 0.1, -2, 2, 0.001)
     # print(pd.DataFrame(grid))
+    isConvergent = complexMatrixWrapper(grid)
 
-    isConvergent= []
-    for i in range(len(grid)):
-        subConvergent = []
-        for j, complex in enumerate(grid[i]):
-            subConvergent.append( checkConvergence(complex))
-        isConvergent.append(subConvergent)
+    # isConvergent= []
+    # for i in range(len(grid)):
+    #     subConvergent = []
+    #     for j, complex in enumerate(grid[i]):
+    #         subConvergent.append( checkConvergence(complex))
+    #     isConvergent.append(subConvergent)
     plt.imshow(isConvergent, cmap='hot')
     plt.show()
 
