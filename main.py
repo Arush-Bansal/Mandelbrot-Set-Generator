@@ -61,7 +61,7 @@ def complexMatrixWrapper(grid):
 
 def main():
 
-    grid = complexMatrix(-2, 0.1, -2, 2, 0.001)
+    grid = complexMatrix(-3, 1, -2, 2, 0.001)
     # print(pd.DataFrame(grid))
     isConvergent = complexMatrixWrapper(grid)
 

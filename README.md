@@ -1,5 +1,6 @@
 Just Something That I wished to make after watching 3B1B video
 
+
 Things I Tried and what worked:
 1. First I made a basic functioning code and launched it. It was working but the computation was very slow
 2. Then I integrated the cProfile.Profiler(), pstats so that I cound use snakeviz to see where my time gets spent the most and have a clear view where the program time gets most spent
